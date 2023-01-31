@@ -14,7 +14,20 @@ bot = telebot.TeleBot(BOT_TOKEN)
 
 @bot.message_handler(commands=['start', 'hello'])
 def send_welcome(message):
-    bot.reply_to(message, "Howdy, how are you doing?")
+    """
+    Sends welcome message to an user
+    """
+    bot.reply_to(message, "Hellow, welcome to flightsIO, use /help to see my functionalities")
+
+@bot.message_handler(commands=['help'])
+def show_functionalities(message):
+    """
+    Shows all functionalities that bot has
+    """
+    bot.reply_to(message, "For now I have only one functionality:")
+    text = "Use */cheapest_flights* to get up to 100 avaliable flights"
+    bot.send_message(message.chat.id, text, parse_mode="Markdown")
+
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
