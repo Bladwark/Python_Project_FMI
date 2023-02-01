@@ -3,7 +3,7 @@ Module representing telegram bot
 """
 import os
 import telebot
-from utils import get_tickets,is_valid_date
+from utils import get_tickets,is_valid_date, is_valid_city
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
@@ -44,6 +44,8 @@ def to_handler(message):
     Requests destination city
     """
     city_from = message.text
+    if is_valid_city(city_from):
+        pass
     # validate city_form
     text = "Input *IATA* (2 or 3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
@@ -54,6 +56,8 @@ def departure_date_handler(message,city_from):
     Requests deaprture date
     """
     city_to = message.text
+    if is_valid_city(city_to):
+        pass
     # validate city_to
     text = "Input departure date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified departure date, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
@@ -96,15 +100,14 @@ def find_tickets(message,city_from,city_to, departure_date, return_date):
     """
     currency = message.text
     tickets = get_tickets(departure_date, return_date,city_from,city_to,currency )
-    #builds a list of tickets with length <= max possible output
     #TODO: add page feature to show more that 4096 symbols aka mulyiple responses
-
     # is it okay error handling?
     if tickets is None:
         bot.send_message(message.chat.id, "We appologise, an error accuried while searching, please try again later.")
         return
 
     if tickets:
+        #builds a list of tickets with length <= max possible output
         max_result = [x for index, x in enumerate(tickets) if index < MAX_LENGTH_OF_OUTPUT and x is not None]
         text = "".join([ str(ticket) + "\n" for ticket in max_result])
         bot.send_message(message.chat.id, "Here are your cheapest tickets!")

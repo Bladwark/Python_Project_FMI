@@ -53,5 +53,8 @@ def get_tickets(depart_date: str, return_date: str, destination_from: str, desti
     
     return make_beautiful_response(my_trip.destination_from ,flights)
 
-def is_valid_date(date: str) -> bool | None:
+def is_valid_date(date: str) -> bool:
+    return True
+
+def is_valid_city(date: str) -> bool:
     return True
