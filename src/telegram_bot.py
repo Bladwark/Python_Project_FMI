@@ -3,7 +3,7 @@ Module representing telegram bot
 """
 import os
 import telebot
-from utils import get_tickets
+from utils import get_tickets,is_valid_date
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
@@ -64,7 +64,10 @@ def return_date_handler(message,city_from,city_to):
     Requests return date
     """
     departure_date = message.text
-    # validate departure_date && checks if is '-'
+    if not is_valid_date(departure_date):
+        pass
+    if departure_date == "-":
+        departure_date = ""
     text = "Input return date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified return date, enter *-*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, currency_handler, city_to, city_from, departure_date)
@@ -75,7 +78,10 @@ def currency_handler(message,city_from,city_to, departure_date):
     Requests currency
     """
     return_date = message.text
-    # validate return_date && checks if is '-'
+    if not is_valid_date(return_date):
+        pass
+    if return_date == "-":
+        return_date = ""
     text = "Input currency\nfor default currency (EUR), enter *-* "
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, find_tickets, city_to, city_from, departure_date, return_date)
@@ -89,11 +95,7 @@ def find_tickets(message,city_from,city_to, departure_date, return_date):
     Returns tickets
     """
     currency = message.text
-    # validate currency? && checks if is '-'
     tickets = get_tickets(departure_date, return_date,city_from,city_to,currency )
-    # convert into list comp
-    # check if any results in range
-
     #builds a list of tickets with length <= max possible output
     #TODO: add page feature to show more that 4096 symbols aka mulyiple responses
     max_result = [x for index, x in enumerate(tickets) if index < MAX_LENGTH_OF_OUTPUT and x is not None]
