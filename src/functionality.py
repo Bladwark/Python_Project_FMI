@@ -7,12 +7,14 @@ import os
 import requests
 from typing import Dict
 from trip import Trip
-from utils import make_beautiful_response
+# from utils import get_tickets
+import utils
 import json
 
 API_TOKEN = os.environ.get('API_TOKEN') 
 
 # we asume trip input here will be always correct
+# TODO: add test for response time > 2 min
 def get_cheapest_flights(my_trip: Trip) -> None | Dict[str, Dict[str, Dict[str,str]]]:
     """
     Makes request to API and returns flights coresponding to given parameters
@@ -33,11 +35,11 @@ def get_cheapest_flights(my_trip: Trip) -> None | Dict[str, Dict[str, Dict[str,s
     return None
 
 if __name__ == "__main__":
-    dummy_trip = Trip("2023-02","2023-02","SOF","-")
-    flights = get_cheapest_flights(dummy_trip)
-    if flights != None:
-        list = make_beautiful_response(dummy_trip.destination_from,flights)
-        for el in list:
-            print(el)
-        
+    # pass
+    # dummy_trip = Trip()
+    list = utils.get_tickets("2023-02","2023-02","SOF","-","-")
+    for el in list:
+        print(el)
+
+    
     
