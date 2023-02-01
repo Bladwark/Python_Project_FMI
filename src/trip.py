@@ -7,7 +7,7 @@ class Trip:
     Contains all needed information about a trip
     """
 
-    def __init__(self, depart_date: str, return_date: str, destination_from: str, destination_to, currency: str = "EUR") -> None:
+    def __init__(self, depart_date: str, return_date: str, destination_from: str, destination_to: str, currency: str = "EUR") -> None:
         self.__depart_date = depart_date
         self.__return_date = return_date
         self.__destination_from = destination_from
