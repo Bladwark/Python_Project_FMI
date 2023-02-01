@@ -35,7 +35,7 @@ def make_beautiful_response(city_from: str ,data: Dict[str, Dict[str, Dict[str,s
     
     return list(answer)
 
-def get_tickets(depart_date: str, return_date: str, destination_from: str, destination_to: str, currency: str):
+def get_tickets(depart_date: str, return_date: str, destination_from: str, destination_to: str, currency: str) -> List[str] | None:
     """
     Returns list of tickets by givent trip data
     """
@@ -44,10 +44,12 @@ def get_tickets(depart_date: str, return_date: str, destination_from: str, desti
     my_trip = Trip (depart_date, return_date, destination_from, destination_to)
     flights = get_cheapest_flights(my_trip)
     
-    #TODO: if flights is Empty == no such tickets, waht to do 
+    #TODO: if flights is Empty == no such tickets, waht to do
+    if not flights:
+        return []
     #TODO: if API response is not valid, waht to do 
     if flights is None:
-        return "some kind of error"
+        return None
     
     return make_beautiful_response(my_trip.destination_from ,flights)
 

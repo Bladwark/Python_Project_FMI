@@ -45,7 +45,7 @@ def to_handler(message):
     """
     city_from = message.text
     # validate city_form
-    text = "Input *IATA* (2 or 3 cahracter long) code of the destination city\nfor all routes, enter *-*"
+    text = "Input *IATA* (2 or 3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg,departure_date_handler, city_from.upper())
 
@@ -55,7 +55,7 @@ def departure_date_handler(message,city_from):
     """
     city_to = message.text
     # validate city_to
-    text = "Input departure date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified departure date, enter *-*"
+    text = "Input departure date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified departure date, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg,return_date_handler, city_from, city_to.upper())
 
@@ -68,7 +68,7 @@ def return_date_handler(message,city_from,city_to):
         pass
     if departure_date == "-":
         departure_date = ""
-    text = "Input return date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified return date, enter *-*"
+    text = "Input return date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified return date, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, currency_handler, city_to, city_from, departure_date)
 
@@ -82,7 +82,7 @@ def currency_handler(message,city_from,city_to, departure_date):
         pass
     if return_date == "-":
         return_date = ""
-    text = "Input currency\nfor default currency (EUR), enter *-* "
+    text = "Input currency\nfor default currency (EUR), enter *\"-\"* "
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, find_tickets, city_to, city_from, departure_date, return_date)
 
@@ -98,10 +98,20 @@ def find_tickets(message,city_from,city_to, departure_date, return_date):
     tickets = get_tickets(departure_date, return_date,city_from,city_to,currency )
     #builds a list of tickets with length <= max possible output
     #TODO: add page feature to show more that 4096 symbols aka mulyiple responses
-    max_result = [x for index, x in enumerate(tickets) if index < MAX_LENGTH_OF_OUTPUT and x is not None]
-    text = "".join([ str(ticket) + "\n" for ticket in max_result])
-    bot.send_message(message.chat.id, "Here are your cheapest tickets!\n")
-    bot.send_message(message.chat.id, text)
+
+    # is it okay error handling?
+    if tickets is None:
+        bot.send_message(message.chat.id, "We appologise, an error accuried while searching, please try again later.")
+        return
+
+    if tickets:
+        max_result = [x for index, x in enumerate(tickets) if index < MAX_LENGTH_OF_OUTPUT and x is not None]
+        text = "".join([ str(ticket) + "\n" for ticket in max_result])
+        bot.send_message(message.chat.id, "Here are your cheapest tickets!")
+        bot.send_message(message.chat.id, text)
+        return
+
+    bot.send_message(message.chat.id, "No flights were found within given information.")
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
