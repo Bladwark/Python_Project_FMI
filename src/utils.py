@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Dict, List
 from trip import Trip
 from functionality import get_cheapest_flights
+from constants import CITIES
 # for future me: get time from return and arival and calcuclate it to 
 # local time at the city u start your trip from
 
@@ -56,5 +57,8 @@ def get_tickets(depart_date: str, return_date: str, destination_from: str, desti
 def is_valid_date(date: str) -> bool:
     return True
 
-def is_valid_city(date: str) -> bool:
-    return True
+
+
+
+def is_valid_city(city: str) -> bool:
+    return city in CITIES
