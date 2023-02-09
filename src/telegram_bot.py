@@ -34,7 +34,7 @@ def from_handler(message):
     """
     Requests departure city
     """
-    text = "Input *IATA* (2 or 3 cahracter long) code of the departure city"
+    text = "Input *IATA* (3 cahracter long) code of the departure city"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, to_handler)
 
@@ -44,10 +44,13 @@ def to_handler(message):
     Requests destination city
     """
     city_from = message.text
-    if is_valid_city(city_from):
-        pass
-    # validate city_form
-    text = "Input *IATA* (2 or 3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*"
+    if not is_valid_city(city_from.upper()):
+        bot.send_message(message.chat.id, "Invalid *IATA* code of a departure city.", parse_mode="Markdown")
+        sent_msg = bot.send_message(message.chat.id, "Input *IATA* (3 cahracter long) code of the departure city", parse_mode="Markdown")
+        bot.register_next_step_handler(sent_msg,to_handler)
+        return
+
+    text = "Input *IATA* (3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg,departure_date_handler, city_from.upper())
 
@@ -56,9 +59,13 @@ def departure_date_handler(message,city_from):
     Requests deaprture date
     """
     city_to = message.text
-    if is_valid_city(city_to):
-        pass
+    if not is_valid_city(city_to.upper()):
+        bot.send_message(message.chat.id, "Invalid *IATA* code of a destination city.", parse_mode="Markdown")
+        sent_msg = bot.send_message(message.chat.id, "Input *IATA* (3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*", parse_mode="Markdown")
+        bot.register_next_step_handler(sent_msg,departure_date_handler, city_from)
+        return
     # validate city_to
+
     text = "Input departure date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified departure date, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg,return_date_handler, city_from, city_to.upper())
