@@ -59,12 +59,11 @@ def departure_date_handler(message,city_from):
     Requests deaprture date
     """
     city_to = message.text
-    if not is_valid_city(city_to.upper()):
+    if not is_valid_city(city_to.upper()) and not city_to == '-':
         bot.send_message(message.chat.id, "Invalid *IATA* code of a destination city.", parse_mode="Markdown")
         sent_msg = bot.send_message(message.chat.id, "Input *IATA* (3 cahracter long) code of the destination city\nfor all routes, enter *\"-\"*", parse_mode="Markdown")
         bot.register_next_step_handler(sent_msg,departure_date_handler, city_from)
         return
-    # validate city_to
 
     text = "Input departure date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified departure date, enter *\"-\"*"
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
@@ -75,11 +74,17 @@ def return_date_handler(message,city_from,city_to):
     Requests return date
     """
     departure_date = message.text
-    if not is_valid_date(departure_date):
-        pass
+    text = "Input return date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified return date, enter *\"-\"*"
+    
+    if not is_valid_date(departure_date) and not departure_date == "-":
+        bot.send_message(message.chat.id, "Incorrect date format, should be *YYYY-MM-DD*", parse_mode="Markdown")
+        sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        bot.register_next_step_handler(sent_msg,return_date_handler, city_from, city_to)
+        return
+
     if departure_date == "-":
         departure_date = ""
-    text = "Input return date/month in *YYYY-MM-DD / YYYY-MM* format\nfor not specified return date, enter *\"-\"*"
+
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, currency_handler, city_to, city_from, departure_date)
 
@@ -89,11 +94,17 @@ def currency_handler(message,city_from,city_to, departure_date):
     Requests currency
     """
     return_date = message.text
-    if not is_valid_date(return_date):
-        pass
+    text = "Input currency\nfor default currency (EUR), enter *\"-\"* "
+    
+    if not is_valid_date(return_date) and not return_date == "-":
+        bot.send_message(message.chat.id, "Incorrect date format, should be *YYYY-MM-DD*", parse_mode="Markdown")
+        sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
+        bot.register_next_step_handler(sent_msg,currency_handler, city_from, city_to,departure_date)
+        return
+    
     if return_date == "-":
         return_date = ""
-    text = "Input currency\nfor default currency (EUR), enter *\"-\"* "
+    
     sent_msg = bot.send_message(message.chat.id, text, parse_mode="Markdown")
     bot.register_next_step_handler(sent_msg, find_tickets, city_to, city_from, departure_date, return_date)
 
