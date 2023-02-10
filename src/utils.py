@@ -6,6 +6,7 @@ from typing import Dict, List
 from trip import Trip
 from functionality import get_cheapest_flights
 from constants import CITIES
+from datetime import datetime
 # for future me: get time from return and arival and calcuclate it to 
 # local time at the city u start your trip from
 
@@ -55,10 +56,20 @@ def get_tickets(depart_date: str, return_date: str, destination_from: str, desti
     return make_beautiful_response(my_trip.destination_from ,flights)
 
 def is_valid_date(date: str) -> bool:
-    return True
+
+    format1 = "%Y-%m-%d"
+    format2 = "%Y-%m"
+
+    try:
+        is_correct_date = bool (datetime.strptime(date,format1))
+    except ValueError:
+        try:
+            is_correct_date = bool (datetime.strptime(date,format2)) 
+        except ValueError:
+            is_correct_date = False
 
 
-
+    return is_correct_date
 
 def is_valid_city(city: str) -> bool:
     return city in CITIES
