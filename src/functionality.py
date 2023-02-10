@@ -38,8 +38,9 @@ if __name__ == "__main__":
     # pass
     # dummy_trip = Trip()
     list = utils.get_tickets("2023-02","2023-02","SOF","-","-")
-    for el in list:
-        print(el)
+    if list is not None:
+        for el in list:
+            print(el)
 
     
     
