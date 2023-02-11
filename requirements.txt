@@ -1,0 +1,5 @@
+mypy==0.991
+mypy-extensions==0.4.3
+pyTelegramBotAPI==4.9.0
+requests==2.22.0
+typing-extensions==4.4.0
