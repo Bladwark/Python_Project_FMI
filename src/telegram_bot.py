@@ -9,7 +9,7 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 # if this exception raised then a programmer forgot to expotr his token which means that program can't contuinue working
 if BOT_TOKEN is  None:
-    raise Exception
+    raise Exception("BOT_TOKEN was not loaded")
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -136,7 +136,9 @@ def find_tickets(message,city_from,city_to, departure_date, return_date):
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
-    # bot.reply_to(message, message.text)
+    """
+    echoes all invalid messages as \"Ivalid input\"
+    """
     bot.send_message(message.chat.id, "Invalid command.")
 
 

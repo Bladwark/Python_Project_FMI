@@ -56,7 +56,9 @@ def get_tickets(depart_date: str, return_date: str, destination_from: str, desti
     return make_beautiful_response(my_trip.destination_from ,flights)
 
 def is_valid_date(date: str) -> bool:
-
+    """
+    Validates date input
+    """
     format1 = "%Y-%m-%d"
     format2 = "%Y-%m"
 
@@ -72,4 +74,7 @@ def is_valid_date(date: str) -> bool:
     return is_correct_date
 
 def is_valid_city(city: str) -> bool:
+    """
+    Validates city input
+    """
     return city in CITIES
