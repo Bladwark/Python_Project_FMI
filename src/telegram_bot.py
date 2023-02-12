@@ -136,6 +136,8 @@ def find_tickets(message,city_from,city_to, departure_date, return_date):
 
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
-    bot.reply_to(message, message.text)
+    # bot.reply_to(message, message.text)
+    bot.send_message(message.chat.id, "Invalid command.")
+
 
 bot.infinity_polling()
