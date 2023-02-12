@@ -5,11 +5,13 @@ This telegram bot is used to extract information for the cheapest flights based 
 
 # Getting ready
 to start using the bot you need to create .env file which contains:
+
 export BOT_TOKEN = [your telegram bot token]
 export API_TOKEN = [your API token]
 
 guide how to get your telegram bot token:
   - https://www.freecodecamp.org/news/how-to-create-a-telegram-bot-using-python/
+ 
 to obtain API key you need:
   - register on https://app.travelpayouts.com
   - create a "project"
