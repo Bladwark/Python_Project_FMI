@@ -1,6 +1,7 @@
 # Python_Project_FMI
 This project was used for final project for Python course in Sofia Univirsity FMI copyng any line of code from this repo could be counted as PLAGIARISM
-#Overview
+
+# Overview
 This telegram bot is used to extract information for the cheapest flights based on given trip details. The source of information is the cache from last 2 days of "Aviasales.ru".
 
 # Getting ready
